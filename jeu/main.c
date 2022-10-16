@@ -11,11 +11,13 @@
 void Randomize(); 
 int Random(int max); 
 int rollDice();
+int recherche(int x, int *tabl, int taille);
+
 
 int main(int argc, char* argv[]){
     //main process of a little horses game with n players
     //variable of the game
-    int nextPlayer = 0;
+    int nextPlayer = 1;
     bool diceIsSix = false;
     int dice = 0;
     bool gameIsOver = false;
@@ -23,13 +25,20 @@ int main(int argc, char* argv[]){
     int n = atoi(argv[1]);
     //array of pid
     int pidTab[n];
+    
 
 
-    //create an array of 56 cases for the gameboard and fill it with 0
-    int gameboard[56];
+    //create an array 3D n,2,56 cases each for the gameboard and fill it with 0
+    int gameBoard[n][2][56];
     int i;
-    for(i=0; i<56; i++){
-        gameboard[i]=0;
+    int j;
+    int k;
+    for(i=0; i<n; i++){
+        for(j=0; j<2; j++){
+            for(k=0; k<56; k++){
+                gameBoard[i][j][k] = 0;
+            }
+        }
     }
     //create an array of 6 cases for the final stairs and fill it with 0
     int stair[6];
@@ -82,7 +91,8 @@ int main(int argc, char* argv[]){
             //write to pipe i+1
             if(i == nextPlayer){
                 x = rollDice();
-                printf("Child %d rolled a %d\n", i, x);
+                
+                
             }
             if(write(pipes[i+1][1], &x, sizeof(int))< 0){
                 printf("erreur ecriture pipe");
@@ -100,7 +110,7 @@ int main(int argc, char* argv[]){
     //main process
 
     //close all pipes except the first one
-    int j;
+    
     for(j=0; j<n+1; j++){
         if(j!=n){
             close(pipes[j][0]);
@@ -109,19 +119,61 @@ int main(int argc, char* argv[]){
             close(pipes[j][1]);
         }
     }
-    int y = 5;
-    if(write(pipes[0][1], &y, sizeof(int))< 0){
+    if(write(pipes[0][1], &dice, sizeof(int))< 0){
         printf("erreur ecriture pipe");
         return 5;
     }
-    if(read(pipes[n][0], &y, sizeof(int))< 0){
+    if(read(pipes[n][0], &dice, sizeof(int))< 0){
         printf("erreur lecture pipe");
         return 6;
     }
 
-    printf("Main process read x : %d from pipe %d\n", y, n);
-    printf("player %d rolled a %d\n", nextPlayer, y);
-    nextPlayer++;
+    printf("Main process read x : %d from pipe %d\n", dice, n);
+    printf("player %d rolled a %d\n", nextPlayer, dice);
+    if(dice != 6){
+        if(nextPlayer == n-1){
+            nextPlayer = 0;
+        }else{
+            nextPlayer = (nextPlayer + 1) % n;
+        }
+    }else{
+        diceIsSix = true;
+        if(recherche(1,gameBoard[nextPlayer][0],56) == -1){
+            gameBoard[nextPlayer][0][0] = 1;
+        }else{
+            if(recherche(1,gameBoard[nextPlayer][1],56) == -1){
+                printf("Voulez vous sortir un cheval de l'écurie ou avancer votre premier cheval ? (1 ou 2)\n");
+                int choice;
+                scanf("%d", &choice);
+                if(choice == 1){
+                    gameBoard[nextPlayer][1][0] = 1;
+                    printf("Vous avez sorti votre deuxieme cheval de l'écurie\n");
+                }else if(choice == 2){
+                    int indicePremierCheval = recherche(1,gameBoard[nextPlayer][0],56);
+                    gameBoard[nextPlayer][0][indicePremierCheval] = 0;
+                    gameBoard[nextPlayer][0][indicePremierCheval + dice] = 1;
+                    printf("Vous avez avancé le premier cheval à la case %d\n", indicePremierCheval + dice);
+
+                }
+            }else{
+                printf("Voulez vous avancer le premier cheval ou le deuxième ? (1 ou 2)\n");
+                int choice;
+                scanf("%d", &choice);
+                if(choice == 1){
+                    int indicePremierCheval = recherche(1,gameBoard[nextPlayer][0],56);
+                    gameBoard[nextPlayer][0][indicePremierCheval] = 0;
+                    gameBoard[nextPlayer][0][indicePremierCheval + dice] = 1;
+                    printf("Vous avez avancé le premier cheval à la case %d\n", indicePremierCheval + dice);
+                }else if(choice == 2){
+                    int indiceDeuxiemeCheval = recherche(1,gameBoard[nextPlayer][1],56);
+                    gameBoard[nextPlayer][1][indiceDeuxiemeCheval] = 0;
+                    gameBoard[nextPlayer][1][indiceDeuxiemeCheval + dice] = 1;
+                    printf("Vous avez avancé le deuxième cheval à la case %d\n", indiceDeuxiemeCheval + dice);
+                }
+
+            }
+        }
+    }
     printf("next player is %d\n", nextPlayer);
 
     //finishing close all pipes
@@ -152,6 +204,15 @@ int rollDice(){
 }
 //end of the dice roll functions
 
-
+int recherche(int x, int *tabl, int taille){
+    int res;
+    for (int i =0; i< taille; i++){
+        if (tabl[i]== x){
+            res= i;
+            return res;
+        }
+    }
+    return -1;
+}
 
 
