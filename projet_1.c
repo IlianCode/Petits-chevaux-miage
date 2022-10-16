@@ -1,80 +1,103 @@
+//n proccess -> n+1 pipes
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/wait.h>
+#include <time.h>
+#include <string.h>
 
-int main(void){
-    
-    int fd[3][2];
+int main(int argc, char* argv[]){
+    //get value of n in argument
+    int n = atoi(argv[1]);
+    //array of pid
+    int pidTab[n];
+    //create n+1 pipes
+    int pipes[n+1][2];
     int i;
-    for(i = 0; i < 3; i++){
-        if(pipe(fd[i]) <0){
+    for(i = 0; i < n+1; i++){
+        if(pipe(pipes[i]) ==-1){
+            printf("erreur pipe");
             return 1;
         } 
     }
-     
-    int pid1 = fork();
-    if(pid1<0){
-        return 2;
-    }
-    if(pid1 == 0){
-        //child 1
-        close(fd[0][1]);
-        close(fd[1][0]);
-        close(fd[2][1]);
-        close(fd[2][0]);
-        int x;
-        if(read(fd[0][0], &x, sizeof(int))< 0){
-            return 3;
+
+
+    //create n+1 children
+    for (i=0; i< n ; i ++){
+        pidTab[i] = fork();
+        if(pidTab[i]==-1){
+            printf("erreur création processus");
+            return 2;
         }
-        printf("Child 1 read x : %d from pipe 1\n", x);
-        if(write(fd[1][1], &x, sizeof(int))< 0){
-            return 4;
+        if(pidTab[i]==0){
+            //child process
+            //close all pipes except the one he is using
+            int j;
+            for(j=0; j<n+1; j++){
+                if(j!=i){
+                    close(pipes[j][0]);
+                }
+                if(j!=i+1){
+                    close(pipes[j][1]);
+                }
+            }
+            //read from pipe i
+            int x;
+            if(read(pipes[i][0], &x, sizeof(int))< 0){
+                printf("erreur lecture pipe");
+                return 3;
+            }
+            printf("Child %d read x : %d from pipe %d\n", i, x, i);
+            //write to pipe i+1
+            
+            if(write(pipes[i+1][1], &x, sizeof(int))< 0){
+                printf("erreur ecriture pipe");
+                return 4;
+            }
+            //close all pipes
+            close(pipes[i][0]);
+            close(pipes[i+1][1]);
+            
+            return 0;
         }
-        close(fd[0][0]);
-        close(fd[1][1]);
-        return 0;
     }
-    int pid2 = fork();
-    if(pid2<0){
+
+
+    //main process
+
+    //close all pipes except the first one
+    int j;
+    for(j=0; j<n+1; j++){
+        if(j!=n){
+            close(pipes[j][0]);
+        }
+        if(j!=0){
+            close(pipes[j][1]);
+        }
+    }
+    int y = 5;
+    if(write(pipes[0][1], &y, sizeof(int))< 0){
+        printf("erreur ecriture pipe");
         return 5;
     }
-    if(pid2 == 0){
-        //child 2
-        close(fd[0][0]);
-        close(fd[0][1]);
-        close(fd[1][1]);
-        close(fd[2][0]);
-        
-        int x;
-        if(read(fd[1][0], &x, sizeof(int))< 0){
-            return 6;
-        }
-        printf("Child 2 read x : %d from pipe 2\n", x);
-        if(write(fd[2][1], &x, sizeof(int))< 0){
-            return 7;
-        }
-        close(fd[1][0]);
-        close(fd[2][1]);
-        return 0;
-
+    if(read(pipes[n][0], &y, sizeof(int))< 0){
+        printf("erreur lecture pipe");
+        return 6;
     }
 
-//parent process
-    close(fd[0][0]);
-    close(fd[1][0]);
-    close(fd[1][1]);
-    close(fd[2][1]);
-    int x=9;
-   if( write(fd[0][1], &x, sizeof(int)) < 0){
-       return 8;
+    printf("Main process read x : %d from pipe %d\n", y, n);
+    //finishing close all pipes
+    close(pipes[0][0]);
+    close(pipes[n][1]);
+    
+    //wait for all children to finish
+    for (i=0; i< n ; i ++){
+        wait(NULL);
     }
-    if(read(fd[2][0], &x, sizeof(int))< 0){
-        return 9;
-    }
-    printf("Parent read x : %d from pipe 3\n", x);
-    close(fd[0][1]);
-    close(fd[2][0]);
-    waitpid(pid1, NULL, 0);
-    waitpid(pid2, NULL, 0);
+
+
+
     return 0;
 }
