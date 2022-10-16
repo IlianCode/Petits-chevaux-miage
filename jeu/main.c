@@ -5,7 +5,12 @@
 #include <time.h>
 #include <string.h>
 #include <stdbool.h> // Header-file for boolean data-type.
+#include <time.h> /* Needed just for srand seed */
 
+// Function prototype.
+void Randomize(); 
+int Random(int max); 
+int rollDice();
 
 int main(int argc, char* argv[]){
     //main process of a little horses game with n players
@@ -18,6 +23,7 @@ int main(int argc, char* argv[]){
     int n = atoi(argv[1]);
     //array of pid
     int pidTab[n];
+
 
     //create an array of 56 cases for the gameboard and fill it with 0
     int gameboard[56];
@@ -33,7 +39,9 @@ int main(int argc, char* argv[]){
 
 
 
+   // while (!gameIsOver){
 
+    
     //create n+1 pipes
     int pipes[n+1][2];
     for(i = 0; i < n+1; i++){
@@ -69,9 +77,13 @@ int main(int argc, char* argv[]){
                 printf("erreur lecture pipe");
                 return 3;
             }
+            
             printf("Child %d read x : %d from pipe %d\n", i, x, i);
             //write to pipe i+1
-            
+            if(i == nextPlayer){
+                x = rollDice();
+                printf("Child %d rolled a %d\n", i, x);
+            }
             if(write(pipes[i+1][1], &x, sizeof(int))< 0){
                 printf("erreur ecriture pipe");
                 return 4;
@@ -108,6 +120,10 @@ int main(int argc, char* argv[]){
     }
 
     printf("Main process read x : %d from pipe %d\n", y, n);
+    printf("player %d rolled a %d\n", nextPlayer, y);
+    nextPlayer++;
+    printf("next player is %d\n", nextPlayer);
+
     //finishing close all pipes
     close(pipes[0][0]);
     close(pipes[n][1]);
@@ -117,7 +133,25 @@ int main(int argc, char* argv[]){
         wait(NULL);
     }
 
-
-
     return 0;
+    
 }
+
+
+//initialize the random number generator for the dice roll
+void Randomize() {
+    srand( (unsigned)time( NULL ) ) ;
+}
+int Random(int Max) {
+    return ( rand() % Max)+ 1;
+}
+int rollDice(){
+    Randomize() ;
+    int d1=Random(6) ;
+    return d1;
+}
+//end of the dice roll functions
+
+
+
+
