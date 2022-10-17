@@ -178,7 +178,10 @@ int main(int argc, char* argv[]){
     }else{
         diceIsSix = true;
         if(recherche(1,gameBoard[nextPlayer][0],56) == -1){
+            //sort le premier cheval du joueur
             gameBoard[nextPlayer][0][0] = 1;
+            printf("player %d put a horse on the gameboard\n", nextPlayer);
+            
         }else{
             if(recherche(1,gameBoard[nextPlayer][1],56) == -1){
                 printf("Voulez vous sortir un cheval de l'écurie ou avancer votre premier cheval ? (1 ou 2)\n");
