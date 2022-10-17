@@ -47,8 +47,8 @@ int main(int argc, char* argv[]){
     }
 
 
-
-   // while (!gameIsOver){
+    int oui =0;
+    while (!gameIsOver){
 
     
     //create n+1 pipes
@@ -131,11 +131,50 @@ int main(int argc, char* argv[]){
     printf("Main process read x : %d from pipe %d\n", dice, n);
     printf("player %d rolled a %d\n", nextPlayer, dice);
     if(dice != 6){
+        
+        //if no horse 0 but horse 1 on the gameboard, horse 1 moves
+        if(recherche(nextPlayer, gameBoard[nextPlayer][0], 56) == -1){
+            if(recherche(nextPlayer, gameBoard[nextPlayer][1], 56)){
+
+                int indiceCheval = recherche(1,gameBoard[nextPlayer][0],56);
+                gameBoard[nextPlayer][1][indiceCheval] = 0;
+                gameBoard[nextPlayer][1][indiceCheval + dice] = 1;
+            }
+        }
+        //if no horse 1 but horse 0 on the gameboard, horse 0 move
+        else if(recherche(nextPlayer, gameBoard[nextPlayer][0], 56) != -1){
+            if(recherche(nextPlayer, gameBoard[nextPlayer][1], 56) == -1){
+                int indiceCheval = recherche(1,gameBoard[nextPlayer][0],56);
+                gameBoard[nextPlayer][0][indiceCheval] = 0;
+                gameBoard[nextPlayer][0][indiceCheval + dice] = 1;
+            }
+        }else if (recherche(nextPlayer, gameBoard[nextPlayer][0], 56) != -1 && recherche(nextPlayer, gameBoard[nextPlayer][1], 56) != -1){
+            //if two horse on the gameboard, ask which one to move
+            printf("Which horse do you want to move ? (0 or 1)\n");
+            int horse;
+            scanf("%d", &horse);
+            if(horse == 0){
+                int indiceCheval = recherche(1,gameBoard[nextPlayer][0],56);
+                gameBoard[nextPlayer][0][indiceCheval] = 0;
+                gameBoard[nextPlayer][0][indiceCheval + dice] = 1;
+            }else if(horse == 1){
+                int indiceCheval = recherche(1,gameBoard[nextPlayer][1],56);
+                gameBoard[nextPlayer][1][indiceCheval] = 0;
+                gameBoard[nextPlayer][1][indiceCheval + dice] = 1;
+            }
+        }
+
+        //if the player doesnt have a horse on the gameboard
+        //if the lastplayer to play was n-1, the nex player is 0
         if(nextPlayer == n-1){
             nextPlayer = 0;
-        }else{
+        }
+        //if the lastplayer to play wasnt n-1, the next player is the lastplayer +1
+        else{
             nextPlayer = (nextPlayer + 1) % n;
         }
+
+
     }else{
         diceIsSix = true;
         if(recherche(1,gameBoard[nextPlayer][0],56) == -1){
@@ -184,7 +223,11 @@ int main(int argc, char* argv[]){
     for (i=0; i< n ; i ++){
         wait(NULL);
     }
-
+    oui++;
+    if(oui == 4 ){
+        gameIsOver = true;
+    }
+    }
     return 0;
     
 }
