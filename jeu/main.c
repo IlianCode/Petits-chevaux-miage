@@ -13,7 +13,7 @@ int Random(int max);
 int rollDice();
 int recherche(int x, int *tabl, int player , int horse, int taille);
 void changeCase(int player, int horse, int caseBoard, int *array, int value);
-bool isCaseEmpty(int player, int horse, int caseBoard, int *array){
+int isCaseEmpty(int player, int horse, int caseBoard, int *array, int nbPlayer);
 
 
 int main(int argc, char* argv[]){
@@ -29,11 +29,7 @@ int main(int argc, char* argv[]){
     int pidTab[n];
     int caseMoved; 
     int i, j , k;
-    //array 2d to represent the stable the set the value of the stable to 2 for each player
-    int stable[n];
-    for(i=0; i<n; i++){
-        stable[i] = 2;
-    }
+ 
 
     //create an array 3D n,2,56 cases each for the gameboard and fill it with 0
     int *gameBoard = malloc(n*2*56*sizeof(int));
@@ -146,9 +142,17 @@ int main(int argc, char* argv[]){
             if(recherche(1, gameBoard, nextPlayer,1, lengthOfGb)!= -1){
 
                 int indiceCheval = recherche(1,gameBoard,nextPlayer,1,lengthOfGb);
-
-                changeCase(nextPlayer,1,indiceCheval,gameBoard, 0);
-                changeCase(nextPlayer,1,indiceCheval+dice ,gameBoard, 1);
+                //before moving the horse, check if there is a horse on the case where the horse is going to move
+                int checkIfEmpty =isCaseEmpty(nextPlayer,1,indiceCheval+dice,gameBoard,n);
+                if(checkIfEmpty==-1){
+                    changeCase(nextPlayer,1,indiceCheval,gameBoard, 0);
+                    changeCase(nextPlayer,1,indiceCheval+dice ,gameBoard, 1);    
+                }else{
+                    //if there is a horse on the case where the horse is going to move, move the horse back to the stable and put our horse on the case
+                    changeCaseToZero(checkIfEmpty,gameBoard);
+                    changeCase(nextPlayer,1,indiceCheval+dice ,gameBoard, 1);
+                }
+                
                 caseMoved = ((indiceCheval + dice) % nextPlayer*2*56);
                 printf("Joueur %d : Vous avez avancé le premier cheval à la case %d\n", nextPlayer, caseMoved);
 
@@ -160,8 +164,18 @@ int main(int argc, char* argv[]){
         else if(recherche(1, gameBoard,nextPlayer , 0, lengthOfGb) != -1){
             if(recherche(1, gameBoard, nextPlayer, 1, lengthOfGb) == -1){
                 int indiceCheval = recherche(1,gameBoard,nextPlayer, 0,lengthOfGb);
-                changeCase(nextPlayer,0,indiceCheval,gameBoard, 0);
-                changeCase(nextPlayer,0,indiceCheval+dice ,gameBoard, 1);
+                //before moving the horse, check if there is a horse on the case where the horse is going to move
+                int checkIfEmpty =isCaseEmpty(nextPlayer,0,indiceCheval+dice,gameBoard,n);
+                if(checkIfEmpty==-1){
+                    changeCase(nextPlayer,0,indiceCheval,gameBoard, 0);
+                    changeCase(nextPlayer,0,indiceCheval+dice ,gameBoard, 1);
+                }else{
+                    //if there is a horse on the case where the horse is going to move, move the horse back to the stable and put our horse on the case
+                    changeCaseToZero(checkIfEmpty,gameBoard);
+                    changeCase(nextPlayer,0,indiceCheval+dice ,gameBoard, 1);
+                }
+               // changeCase(nextPlayer,0,indiceCheval,gameBoard, 0);
+                //changeCase(nextPlayer,0,indiceCheval+dice ,gameBoard, 1);
 
                 caseMoved = ((indiceCheval + dice) % nextPlayer*2*56);
                 printf("Joueur %d : Vous avez avancé le premier cheval à la case %d\n", nextPlayer, caseMoved);
@@ -176,8 +190,18 @@ int main(int argc, char* argv[]){
             scanf("%d", &horse);
             if(horse == 0){
                 int indiceCheval = recherche(1,gameBoard,nextPlayer,0,lengthOfGb);
-                changeCase(nextPlayer,0,indiceCheval,gameBoard, 0);
-                changeCase(nextPlayer,0,indiceCheval+dice ,gameBoard, 1);
+                //before moving the horse, check if there is a horse on the case where the horse is going to move
+                int checkIfEmpty =isCaseEmpty(nextPlayer,0,indiceCheval+dice,gameBoard,n);
+                if(checkIfEmpty==-1){
+                    changeCase(nextPlayer,0,indiceCheval,gameBoard, 0);
+                    changeCase(nextPlayer,0,indiceCheval+dice ,gameBoard, 1);
+                }else{
+                    //if there is a horse on the case where the horse is going to move, move the horse back to the stable and put our horse on the case
+                    changeCaseToZero(checkIfEmpty,gameBoard);
+                    changeCase(nextPlayer,0,indiceCheval+dice ,gameBoard, 1);
+                }
+                //changeCase(nextPlayer,0,indiceCheval,gameBoard, 0);
+                //changeCase(nextPlayer,0,indiceCheval+dice ,gameBoard, 1);
                 caseMoved = ((indiceCheval + dice) % nextPlayer*2*56);
                 printf("Joueur %d : Vous avez avancé le premier cheval à la case %d\n", nextPlayer, caseMoved);
 
@@ -186,8 +210,19 @@ int main(int argc, char* argv[]){
                // gameBoard[nextPlayer][0][indiceCheval + dice] = 1;
             }else if(horse == 1){
                 int indiceCheval = recherche(1,gameBoard,nextPlayer,1,lengthOfGb);
-                changeCase(nextPlayer,1,indiceCheval,gameBoard, 0);
-                changeCase(nextPlayer,1,indiceCheval+dice ,gameBoard, 1);
+                //before moving the horse, check if there is a horse on the case where the horse is going to move
+                int checkIfEmpty =isCaseEmpty(nextPlayer,1,indiceCheval+dice,gameBoard,n);
+                if(checkIfEmpty==-1){
+                    changeCase(nextPlayer,1,indiceCheval,gameBoard, 0);
+                    changeCase(nextPlayer,1,indiceCheval+dice ,gameBoard, 1);
+                }else{
+                    //if there is a horse on the case where the horse is going to move, move the horse back to the stable and put our horse on the case
+                    changeCaseToZero(checkIfEmpty,gameBoard);
+                    changeCase(nextPlayer,1,indiceCheval+dice ,gameBoard, 1);
+                }
+
+              //  changeCase(nextPlayer,1,indiceCheval,gameBoard, 0);
+              //  changeCase(nextPlayer,1,indiceCheval+dice ,gameBoard, 1);
                 caseMoved = ((indiceCheval + dice) % nextPlayer*2*56);
                 printf("Joueur %d : Vous avez avancé le premier cheval à la case %d\n", nextPlayer, caseMoved);
                 
@@ -211,7 +246,16 @@ int main(int argc, char* argv[]){
         diceIsSix = true;
         if(recherche(1,gameBoard,nextPlayer,0,lengthOfGb) == -1 && recherche(1,gameBoard,nextPlayer,1,lengthOfGb) == -1){
             //sort le premier cheval du joueur
-            changeCase(nextPlayer,0,0,gameBoard, 1);
+            //before moving the horse, check if there is a horse on the case where the horse is going to move
+            int checkIfEmpty =isCaseEmpty(nextPlayer,0,0,gameBoard,n);
+            if(checkIfEmpty==-1){
+                changeCase(nextPlayer,0,0,gameBoard, 1);
+            }else{
+                //if there is a horse on the case where the horse is going to move, move the horse back to the stable and put our horse on the case
+                changeCaseToZero(checkIfEmpty,gameBoard);
+                changeCase(nextPlayer,0,0 ,gameBoard, 1);
+            }
+            //changeCase(nextPlayer,0,0,gameBoard, 1);
             //gameBoard[nextPlayer][0][0] = 1;
             printf("Joueur %d  a mis un cheval sur le plateau !\n", nextPlayer);
             
@@ -221,7 +265,17 @@ int main(int argc, char* argv[]){
                 int choice;
                 scanf("%d", &choice);
                 if(choice == 1){
-                    changeCase(nextPlayer,0,0,gameBoard, 1);
+                    //before moving the horse, check if there is a horse on the case where the horse is going to move
+                    int checkIfEmpty =isCaseEmpty(nextPlayer,0,0,gameBoard,n);
+                    if(checkIfEmpty==-1){
+                        changeCase(nextPlayer,0,0,gameBoard, 1);
+                    }else{
+                        //if there is a horse on the case where the horse is going to move, move the horse back to the stable and put our horse on the case
+                        changeCaseToZero(checkIfEmpty,gameBoard);
+                        changeCase(nextPlayer,0,0 ,gameBoard, 1);
+                    }
+
+                    //changeCase(nextPlayer,0,0,gameBoard, 1);
                     //gameBoard[nextPlayer][0][0] = 1;
                     printf("Joueur %d  a mis un cheval sur le plateau !\n", nextPlayer);
                 }else if(choice == 2){
@@ -268,14 +322,14 @@ int main(int argc, char* argv[]){
                   
                   //  gameBoard[nextPlayer][0][indicePremierCheval] = 0;
                   //  gameBoard[nextPlayer][0][indicePremierCheval + dice] = 1;
-                    printf("Joueur %d : Vous avez avancé le premier cheval à la case %d\n", nextPlayer, caseMoved);
+               //     printf("Joueur %d : Vous avez avancé le premier cheval à la case %d\n", nextPlayer, caseMoved);
                 }else if(choice == 2){
                     int indiceDeuxiemeCheval = recherche(1,gameBoard,nextPlayer,1,lengthOfGb);
                     changeCase(nextPlayer,1,indiceDeuxiemeCheval,gameBoard, 0);
                     changeCase(nextPlayer,1,indiceDeuxiemeCheval+dice,gameBoard, 1);
 
                     caseMoved = ((indiceDeuxiemeCheval + dice) % nextPlayer*2*56);
-                    printf("Joueur %d : Vous avez avancé le premier cheval à la case %d\n", nextPlayer, caseMoved);
+                 //   printf("Joueur %d : Vous avez avancé le premier cheval à la case %d\n", nextPlayer, caseMoved);
 
                     //gameBoard[nextPlayer][1][indiceDeuxiemeCheval] = 0;
                     //gameBoard[nextPlayer][1][indiceDeuxiemeCheval + dice] = 1;
@@ -354,12 +408,61 @@ void changeCase(int player, int horse, int caseBoard, int *array, int value){
         }
     }
 }
-
-bool isCaseEmpty(int player, int horse, int caseBoard, int *array){
+//function to change value of a case in gameBoard to 0
+void changeCaseToZero(int caseBoard, int *array){
+    array[caseBoard] = 0;
+}
+int isCaseEmpty(int player, int horse, int caseBoard, int *array, int nbPlayer){
     
-    if(array[player*2*56+horse*56+caseBoard+70] == 0){
+            int test = 70;
+            for(int i=0; i<nbPlayer*2; i++){
+                int caseToCheck = i*2*56+horse*56+caseBoard+test;
+                if (caseToCheck > 447){
+                    caseToCheck = caseToCheck % 448;
+                }
+                if(array[caseToCheck] != 0){
+                    return caseToCheck;
+                }
+                test +=56;
+            }
+            return -1;
+    /*if(player == 0){
+        if(horse == 0){
+            int test = 70;
+            for(int i=0; i<nbPlayer*2; i++){
+                if(array[i*2*56+horse*56+caseBoard+test] != 0){
+                    return false;
+                }
+                test +=56;
+            }
+            return true;
+        }else if(horse == 1){
+            int test = 70;
+            for(int i=0; i<nbPlayer*2; i++){
+                int caseToCheck = i*2*56+horse*56+caseBoard+test;
+                if (caseToCheck > 447){
+                    caseToCheck = caseToCheck % 448;
+                }
+                if(array[caseToCheck] != 0){
+                    return false;
+                }
+                test +=56;
+            }
+            return true;
+        }
+        
+    }*/
+            //array[i*2*56+j*56+caseBoard+add-1] != 0)
+      
+    
+    
+            return true;
+
+    
+    
+    /*if(array[player*2*56+horse*56+caseBoard+112] == 0){
         return true;
     }else{
         return false;
-    }
+    }*/
 }
