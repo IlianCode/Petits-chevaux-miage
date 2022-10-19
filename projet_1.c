@@ -77,7 +77,7 @@ int main(int argc, char* argv[]){
             close(pipes[j][1]);
         }
     }
-    int y = 5;
+    int y = 0;
     if(write(pipes[0][1], &y, sizeof(int))< 0){
         printf("erreur ecriture pipe");
         return 5;

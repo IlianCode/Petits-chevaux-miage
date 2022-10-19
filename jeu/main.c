@@ -13,11 +13,13 @@ int Random(int max);
 int rollDice();
 int recherche(int x, int *tabl, int player , int horse, int taille);
 void changeCase(int player, int horse, int caseBoard, int *array, int value);
+bool isCaseEmpty(int player, int horse, int caseBoard, int *array){
+
 
 int main(int argc, char* argv[]){
     //main process of a little horses game with n players
     //variable of the game
-    int nextPlayer = 1;
+    int nextPlayer = 0;
     bool diceIsSix = false;
     int dice = 0;
     bool gameIsOver = false;
@@ -27,6 +29,11 @@ int main(int argc, char* argv[]){
     int pidTab[n];
     int caseMoved; 
     int i, j , k;
+    //array 2d to represent the stable the set the value of the stable to 2 for each player
+    int stable[n];
+    for(i=0; i<n; i++){
+        stable[i] = 2;
+    }
 
     //create an array 3D n,2,56 cases each for the gameboard and fill it with 0
     int *gameBoard = malloc(n*2*56*sizeof(int));
@@ -70,6 +77,7 @@ int main(int argc, char* argv[]){
             return 2;
         }
         if(pidTab[i]==0){
+            srand(time(NULL)+getpid());
             //child process
             //close all pipes except the one he is using
             int j;
@@ -92,8 +100,7 @@ int main(int argc, char* argv[]){
             //write to pipe i+1
             if(i == nextPlayer){
                 x = rollDice();
-                
-                
+                printf("new dice rolled !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             }
             if(write(pipes[i+1][1], &x, sizeof(int))< 0){
                 printf("erreur ecriture pipe");
@@ -120,6 +127,8 @@ int main(int argc, char* argv[]){
             close(pipes[j][1]);
         }
     }
+    dice =0;
+
     if(write(pipes[0][1], &dice, sizeof(int))< 0){
         printf("erreur ecriture pipe");
         return 5;
@@ -128,7 +137,6 @@ int main(int argc, char* argv[]){
         printf("erreur lecture pipe");
         return 6;
     }
-
     printf("Main process read x : %d from pipe %d\n", dice, n);
     printf("player %d rolled a %d\n", nextPlayer, dice);
     if(dice != 6){
@@ -189,13 +197,13 @@ int main(int argc, char* argv[]){
         }
 
         //if the player doesnt have a horse on the gameboard
-        //if the lastplayer to play was n-1, the nex player is 0
+        //if the lastplayer to play was n-1, the next player is 0
         if(nextPlayer == n-1){
             nextPlayer = 0;
         }
         //if the lastplayer to play wasnt n-1, the next player is the lastplayer +1
         else{
-            nextPlayer = (nextPlayer + 1) % n;
+            nextPlayer++;
         }
 
 
@@ -288,7 +296,7 @@ int main(int argc, char* argv[]){
         wait(NULL);
     }
     oui++;
-    if(oui == 4 ){
+    if(oui == 50  ){
         gameIsOver = true;
     }
     }
@@ -305,7 +313,6 @@ int Random(int Max) {
     return ( rand() % Max)+ 1;
 }
 int rollDice(){
-    Randomize() ;
     int d1=Random(6) ;
     return d1;
 }
@@ -346,6 +353,13 @@ void changeCase(int player, int horse, int caseBoard, int *array, int value){
             }
         }
     }
+}
 
+bool isCaseEmpty(int player, int horse, int caseBoard, int *array){
     
+    if(array[player*2*56+horse*56+caseBoard+70] == 0){
+        return true;
+    }else{
+        return false;
+    }
 }
