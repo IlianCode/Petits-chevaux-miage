@@ -29,12 +29,10 @@ int main(int argc, char *argv[])
     int checkEmpty[3];
     // variable du jeu
     int nextPlayer = 0;
-    bool diceIsSix = false;
     int dice = 0;
     bool gameIsOver = false;
 
     // array of pid
-    int caseMoved;
     int i, j, k;
 
     int gameBoard[n][2][56];
