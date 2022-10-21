@@ -13,7 +13,7 @@
 int main(int argc, char *argv[])
 {
     // get value of n in argument
-    int n = 4;//atoi(argv[1]);
+    int n = atoi(argv[1]);
     // array of pid
     int pidTab[n];
     int checkDepassement;
@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
         if (dice != 6)
         {
             int saveStair = rechercheStair(1, pStairs, nextPlayer);
-            if (isAtEnd[nextPlayer] == 1)
+            if (saveStair != -1)
             {
                 if (dice == saveStair + 1)
                 {
@@ -318,7 +318,7 @@ int main(int argc, char *argv[])
         else
         {
             int saveStair = rechercheStair(1, pStairs, nextPlayer);
-            if (isAtEnd[nextPlayer] == 1)
+            if (saveStair != -1)
             {
                 if (dice == saveStair + 1)
                 {
@@ -546,9 +546,9 @@ int main(int argc, char *argv[])
         //checkwinner -> get value of the player at case 56
         int checkWinner = checkEndGameBoard(pGameBoard, n); 
         //fill the case of the player at case 56 with a 1 (ex: if player 1 is at case 56, the case 56 of the isAtEnd array will be filled with a 1)
-        fillIsAtEnd(pGameBoard, n, isAtEnd);
+       fillIsAtEnd(pGameBoard, n, isAtEnd);
         
-          //    isThereAWin = checkWinnerStair(pStairs, n);
+        isThereAWin = checkWinnerStair(pStairs, n);
 
         
         //everytime a new player is at case 56
@@ -566,14 +566,20 @@ int main(int argc, char *argv[])
             } 
             //change the case of the horse at case 56 to 0
            //changeCase(0, pGameBoard, indiceWin[0], indiceWin[1], save);
-           gameIsOver = true;
+
         }
-        
-        /*if( isThereAWin != -1 )
+       /* for(int i = 0; i < n; i++){
+            if(stairs[i][0] == 1){
+
+                printf("player %d is on the stair\n", i);
+                gameIsOver = true;
+            }
+        }*/
+        if( isThereAWin != -1 )
         {
             gameIsOver = true;
             printf("Player %d has won the game\n",isThereAWin);
-        }*/
+        }
         
     }
 

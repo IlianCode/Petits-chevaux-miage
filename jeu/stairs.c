@@ -32,7 +32,7 @@ int checkWinnerStair(int (*pStairs)[7], int nbPlayer){
     for (i = 0; i < nbPlayer; i++)
     {
         
-            if (*(*(pStairs + i) + 7) == 1)
+            if (*(*(pStairs + i) + 6) == 1)
             {
               return i;
             }
