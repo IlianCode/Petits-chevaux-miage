@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     // array of pid
     int pidTab[n];
 
-   //array needed
+    //array needed
     int checkEmpty[3];
     int indiceWin[2];
     int isAtEnd[n];
@@ -28,9 +28,11 @@ int main(int argc, char *argv[])
     bool gameIsOver = false;
     int i, j, k;
     int isThereAWin = -1;
-
-    int gameBoard[n][2][56];
     int lengthGb = 0;
+
+    //================================================================================================
+    int gameBoard[n][2][56];
+    //initialization of the array and pointer of the game
     for (i = 0; i < n; i++)
     {
         for (j = 0; j < 2; j++)
@@ -54,8 +56,8 @@ int main(int argc, char *argv[])
         }
     }
     int(*pStairs)[7] = stairs;
+    //================================================================================================
 
-    
     while (!gameIsOver)
     {
 
@@ -124,7 +126,6 @@ int main(int argc, char *argv[])
                 return 0;
             }
         }
-
         // main process
 
         // close all pipes except the first one
@@ -550,35 +551,22 @@ int main(int argc, char *argv[])
         
         isThereAWin = checkWinnerStair(pStairs, n);
 
-        
-        //everytime a new player is at case 56
-        
         if (checkWinner != -1)
         {
             //indiceWin take the value of the payer at case 56 and his horse 
             indiceCheckEndGameBoard(pGameBoard, n, indiceWin);
             //save take the value of the indice of the horse wich is a the case 56
             int save = recherche(1, pGameBoard, indiceWin[0], indiceWin[1], n);
-            printf("player %d won with horse %d\n", indiceWin[0], indiceWin[1]);
             //If the player has no horse on stair -> put one on it 
             if(rechercheStair(1, pStairs, indiceWin[0]) ==-1){
                 stairs[indiceWin[0]][0] = 1; 
             } 
-            //change the case of the horse at case 56 to 0
-           //changeCase(0, pGameBoard, indiceWin[0], indiceWin[1], save);
-
         }
-       /* for(int i = 0; i < n; i++){
-            if(stairs[i][0] == 1){
-
-                printf("player %d is on the stair\n", i);
-                gameIsOver = true;
-            }
-        }*/
+      
         if( isThereAWin != -1 )
         {
             gameIsOver = true;
-            printf("Player %d has won the game\n",isThereAWin);
+            printf("\nPlayer %d has won the game\n",isThereAWin);
         }
         
     }
@@ -597,6 +585,7 @@ int main(int argc, char *argv[])
         }
         printf("\n");
     }
+    //print the final stairs
     printf("\nStairs : \n");
     for (i = 0; i < n; i++)
     {
@@ -607,10 +596,6 @@ int main(int argc, char *argv[])
         printf("\n");
     }
 
-    printf("isAtEnd : \n");
-    for (i = 0; i < n; i++)
-    {
-        printf("%d ", isAtEnd[i]);
-    }
+  
     return 0;
 }
