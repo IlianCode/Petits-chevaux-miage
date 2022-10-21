@@ -163,3 +163,24 @@ int indiceCheckEndGameBoard(int (*pGameBoard)[2][56], int nbPlayer,  int *indice
     // if no horse found, return -1
     return -1;
 }
+
+//function to fill is at end tab then check if someone ended the gameboard yet or no
+int fillIsAtEnd(int (*pGameBoard)[2][56], int nbPlayer, int *isAtEnd){
+    int i, j, k;
+
+    for (i = 0; i < nbPlayer; i++)
+    {
+        for (j = 0; j < 2; j++)
+        {
+            if (*(*(*(pGameBoard + i) + j) + 55) == 1)
+            {
+                isAtEnd[i] = 1;
+            }
+        }
+    }
+    // if no horse found, return -1
+    return isAtEnd[nbPlayer];
+}
+
+
+
