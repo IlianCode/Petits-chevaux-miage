@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     // array of pid
     int pidTab[n];
 
-    //array needed
+    // array needed
     int checkEmpty[3];
     int indiceWin[2];
     int isAtEnd[n];
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 
     //================================================================================================
     int gameBoard[n][2][56];
-    //initialization of the array and pointer of the game
+    // initialization of the array and pointer of the game
     for (i = 0; i < n; i++)
     {
         for (j = 0; j < 2; j++)
@@ -153,6 +153,7 @@ int main(int argc, char *argv[])
         }
         printf("Main process read x : %d from pipe %d\n", dice, n);
 
+        //case where the dice is != 6
         if (dice != 6)
         {
             int saveStair = rechercheStair(1, pStairs, nextPlayer);
@@ -316,7 +317,7 @@ int main(int argc, char *argv[])
                 }
             }
         }
-        else
+        else//If the dice is 6
         {
             int saveStair = rechercheStair(1, pStairs, nextPlayer);
             if (saveStair != -1)
@@ -357,6 +358,7 @@ int main(int argc, char *argv[])
                         printf("Player %d : Do you want to put horse 0 on the gameboard or move horse 1 ? (0 or 1)\n", nextPlayer);
                         int choice;
                         scanf("%d", &choice);
+                        //if the player chose 0 -> put horse 0 on the gameboard
                         if (choice == 0)
                         {
                             int checkIfEmpty = isEmpty(pGameBoard, nextPlayer, 0, 0, n);
@@ -374,6 +376,7 @@ int main(int argc, char *argv[])
                             }
                             printf("Player %d has moved his horse 0 from stable to case %d\n", nextPlayer, 0);
                         }
+                        //if the player chose 1 -> move horse 1
                         else if (choice == 1)
                         {
                             int indiceCheval = recherche(1, pGameBoard, nextPlayer, 1, n);
@@ -413,6 +416,7 @@ int main(int argc, char *argv[])
                         printf("Player %d : Do you want to move horse 0 or  put horse 1 on the gameboard  ? (0 or 1)\n", nextPlayer);
                         int choice;
                         scanf("%d", &choice);
+                        //if the player chose 1 -> put horse 1 on the gameboard
                         if (choice == 1)
                         {
                             int checkIfEmpty = isEmpty(pGameBoard, nextPlayer, 1, 0, n);
@@ -430,6 +434,7 @@ int main(int argc, char *argv[])
                             }
                             printf("Player %d has moved his horse 0 from stable to case %d\n", nextPlayer, 0);
                         }
+                        //if the player chose 0 -> move the horse 0
                         else if (choice == 0)
                         {
                             int indiceCheval = recherche(1, pGameBoard, nextPlayer, 0, n);
@@ -468,13 +473,14 @@ int main(int argc, char *argv[])
                         printf(" Do you want to move horse 0 or horse 1 ? (0 or 1)\n");
                         int choice;
                         scanf("%d", &choice);
+                        //if the player chose 0 -> move horse 0
                         if (choice == 0)
                         {
                             int indiceCheval = recherche(1, pGameBoard, nextPlayer, 0, n);
 
                             if (indiceCheval + dice > 55)
                             {
-                               checkDepassement = 55 - ((indiceCheval + dice) - 55);
+                                checkDepassement = 55 - ((indiceCheval + dice) - 55);
                             }
                             else
                             {
@@ -498,6 +504,7 @@ int main(int argc, char *argv[])
                             }
                             printf("Player %d moved horse 0 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
                         }
+                        //if the player chose 1 -> move horse 1
                         else if (choice == 1)
                         {
                             int indiceCheval = recherche(1, pGameBoard, nextPlayer, 1, n);
@@ -543,32 +550,32 @@ int main(int argc, char *argv[])
         {
             wait(NULL);
         }
-    
-        //checkwinner -> get value of the player at case 56
-        int checkWinner = checkEndGameBoard(pGameBoard, n); 
-        //fill the case of the player at case 56 with a 1 (ex: if player 1 is at case 56, the case 56 of the isAtEnd array will be filled with a 1)
-       fillIsAtEnd(pGameBoard, n, isAtEnd);
-        
+
+        // checkwinner -> get value of the player at case 56
+        int checkWinner = checkEndGameBoard(pGameBoard, n);
+        // fill the case of the player at case 56 with a 1 (ex: if player 1 is at case 56, the case 56 of the isAtEnd array will be filled with a 1)
+        fillIsAtEnd(pGameBoard, n, isAtEnd);
+
         isThereAWin = checkWinnerStair(pStairs, n);
 
         if (checkWinner != -1)
         {
-            //indiceWin take the value of the payer at case 56 and his horse 
+            // indiceWin take the value of the payer at case 56 and his horse
             indiceCheckEndGameBoard(pGameBoard, n, indiceWin);
-            //save take the value of the indice of the horse wich is a the case 56
+            // save take the value of the indice of the horse wich is a the case 56
             int save = recherche(1, pGameBoard, indiceWin[0], indiceWin[1], n);
-            //If the player has no horse on stair -> put one on it 
-            if(rechercheStair(1, pStairs, indiceWin[0]) ==-1){
-                stairs[indiceWin[0]][0] = 1; 
-            } 
+            // If the player has no horse on stair -> put one on it
+            if (rechercheStair(1, pStairs, indiceWin[0]) == -1)
+            {
+                stairs[indiceWin[0]][0] = 1;
+            }
         }
-      
-        if( isThereAWin != -1 )
+
+        if (isThereAWin != -1)
         {
             gameIsOver = true;
-            printf("\nPlayer %d has won the game\n",isThereAWin);
+            printf("\nPlayer %d has won the game\n", isThereAWin);
         }
-        
     }
 
     // print gameboard at the end of the game
@@ -585,7 +592,7 @@ int main(int argc, char *argv[])
         }
         printf("\n");
     }
-    //print the final stairs
+    // print the final stairs
     printf("\nStairs : \n");
     for (i = 0; i < n; i++)
     {
@@ -596,6 +603,5 @@ int main(int argc, char *argv[])
         printf("\n");
     }
 
-  
     return 0;
 }
