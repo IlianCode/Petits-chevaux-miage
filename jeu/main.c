@@ -195,9 +195,9 @@ int main(int argc, char *argv[])
 
                             changeCase(1, pGameBoard, nextPlayer, 1, checkDepassement);
 
-                            printf("The horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
+                            printf("\nThe horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
                         }
-                        printf("Player %d moved horse 1 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
+                        printf("\nPlayer %d moved horse 1 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
                     }
                 }
                 // if no horse 1 but horse 0 on the gameboard, horse 0 move
@@ -230,9 +230,9 @@ int main(int argc, char *argv[])
 
                             changeCase(0, pGameBoard, checkEmpty[0], checkEmpty[1], checkEmpty[2]);
                             changeCase(1, pGameBoard, nextPlayer, 0, checkDepassement);
-                            printf("The horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
+                            printf("\nThe horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
                         }
-                        printf("Player %d has moved his horse 0 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
+                        printf("\nPlayer %d has moved his horse 0 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
                     }
                 }
                 // if two horse on the gameboard, ask which one to move
@@ -241,6 +241,7 @@ int main(int argc, char *argv[])
                     if (recherche(1, pGameBoard, nextPlayer, 1, n) != -1)
                     {
                         printPlayerGameBoard(pGameBoard, nextPlayer, n);
+                        printf("\n[- PLAYER %d -]\n", nextPlayer);
                         printf("Which horse do you want to move ? (0 or 1)\n");
                         int horse;
                         scanf("%d", &horse);
@@ -268,9 +269,9 @@ int main(int argc, char *argv[])
 
                                 changeCase(0, pGameBoard, checkEmpty[0], checkEmpty[1], checkEmpty[2]);
                                 changeCase(1, pGameBoard, nextPlayer, 0, checkDepassement);
-                                printf("The horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
+                                printf("\nThe horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
                             }
-                            printf("Player %d has moved his horse 0 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
+                            printf("\nPlayer %d has moved his horse 0 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
                         }
                         else if (horse == 1)
                         {
@@ -298,9 +299,9 @@ int main(int argc, char *argv[])
 
                                 changeCase(0, pGameBoard, checkEmpty[0], checkEmpty[1], checkEmpty[2]);
                                 changeCase(1, pGameBoard, nextPlayer, 1, checkDepassement);
-                                printf("The horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
+                                printf("\nThe horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
                             }
-                            printf("Player %d moved horse 1 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
+                            printf("\nPlayer %d moved horse 1 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
                         }
                     }
                 }
@@ -345,17 +346,17 @@ int main(int argc, char *argv[])
 
                         changeCase(0, pGameBoard, checkEmpty[0], checkEmpty[1], checkEmpty[2]);
                         changeCase(1, pGameBoard, nextPlayer, 0, 0);
-                        printf("The horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
+                        printf("\nThe horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
                     }
-                    printf("Player %d has moved his horse 0 from stable to case %d\n", nextPlayer, 0);
+                    printf("\nPlayer %d has moved his horse 0 from stable to case %d\n", nextPlayer, 0);
                 }
                 else
                 { // if horse 1 is on the gameboard and horse 0 is in the stable
                     if ((recherche(1, pGameBoard, nextPlayer, 1, n) != -1) && (recherche(1, pGameBoard, nextPlayer, 0, n) == -1))
                     {
                         printPlayerGameBoard(pGameBoard, nextPlayer, n);
-
-                        printf("Player %d : Do you want to put horse 0 on the gameboard or move horse 1 ? (0 or 1)\n", nextPlayer);
+                        printf("\n[- PLAYER %d -]\n", nextPlayer);
+                        printf("\n Do you want to put horse 0 on the gameboard or move horse 1 ? (0 or 1)\n");
                         int choice;
                         scanf("%d", &choice);
                         //if the player chose 0 -> put horse 0 on the gameboard
@@ -372,9 +373,9 @@ int main(int argc, char *argv[])
 
                                 changeCase(0, pGameBoard, checkEmpty[0], checkEmpty[1], checkEmpty[2]);
                                 changeCase(1, pGameBoard, nextPlayer, 0, 0);
-                                printf("The horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
+                                printf("\nThe horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
                             }
-                            printf("Player %d has moved his horse 0 from stable to case %d\n", nextPlayer, 0);
+                            printf("\nPlayer %d has moved his horse 0 from stable to case %d\n", nextPlayer, 0);
                         }
                         //if the player chose 1 -> move horse 1
                         else if (choice == 1)
@@ -403,17 +404,17 @@ int main(int argc, char *argv[])
 
                                 changeCase(0, pGameBoard, checkEmpty[0], checkEmpty[1], checkEmpty[2]);
                                 changeCase(1, pGameBoard, nextPlayer, 1, checkDepassement);
-                                printf("The horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
+                                printf("\nThe horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
                             }
 
-                            printf("Player %d moved horse 1 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
+                            printf("\nPlayer %d moved horse 1 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
                         }
                     } // if horse 0 is on the gameboard and horse 1 is in the stable
                     else if ((recherche(1, pGameBoard, nextPlayer, 1, n) == -1) && (recherche(1, pGameBoard, nextPlayer, 0, n) != -1))
                     {
                         printPlayerGameBoard(pGameBoard, nextPlayer, n);
-
-                        printf("Player %d : Do you want to move horse 0 or  put horse 1 on the gameboard  ? (0 or 1)\n", nextPlayer);
+                        printf("\n[- PLAYER %d -]\n", nextPlayer);
+                        printf("\nDo you want to move horse 0 or  put horse 1 on the gameboard  ? (0 or 1)\n");
                         int choice;
                         scanf("%d", &choice);
                         //if the player chose 1 -> put horse 1 on the gameboard
@@ -430,9 +431,9 @@ int main(int argc, char *argv[])
 
                                 changeCase(0, pGameBoard, checkEmpty[0], checkEmpty[1], checkEmpty[2]);
                                 changeCase(1, pGameBoard, nextPlayer, 0, 0);
-                                printf("The horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
+                                printf("\nThe horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
                             }
-                            printf("Player %d has moved his horse 0 from stable to case %d\n", nextPlayer, 0);
+                            printf("\nPlayer %d has moved his horse 0 from stable to case %d\n", nextPlayer, 0);
                         }
                         //if the player chose 0 -> move the horse 0
                         else if (choice == 0)
@@ -461,16 +462,16 @@ int main(int argc, char *argv[])
 
                                 changeCase(0, pGameBoard, checkEmpty[0], checkEmpty[1], checkEmpty[2]);
                                 changeCase(1, pGameBoard, nextPlayer, 0, checkDepassement);
-                                printf("The horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
+                                printf("\nThe horse %d of player %d is no longer on the gameboard\n", checkEmpty[1], checkEmpty[0]);
                             }
-                            printf("Player %d moved horse 1 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
+                            printf("\nPlayer %d moved horse 1 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
                         }
                     } // if horse 0 and horse 1 are on the gameboard
                     else if ((recherche(1, pGameBoard, nextPlayer, 1, n) != -1) && (recherche(1, pGameBoard, nextPlayer, 0, n) != -1))
                     {
                         printPlayerGameBoard(pGameBoard, nextPlayer, n);
-
-                        printf(" Do you want to move horse 0 or horse 1 ? (0 or 1)\n");
+                        printf("\n[- PLAYER %d -]\n", nextPlayer);
+                        printf(" \nDo you want to move horse 0 or horse 1 ? (0 or 1)\n");
                         int choice;
                         scanf("%d", &choice);
                         //if the player chose 0 -> move horse 0
@@ -500,9 +501,9 @@ int main(int argc, char *argv[])
 
                                 changeCase(0, pGameBoard, checkEmpty[0], checkEmpty[1], checkEmpty[2]);
                                 changeCase(1, pGameBoard, nextPlayer, 0, checkDepassement);
-                                printf("The horse %d of player %d is no longer on the gameboard", checkEmpty[1], checkEmpty[0]);
+                                printf("\nThe horse %d of player %d is no longer on the gameboard", checkEmpty[1], checkEmpty[0]);
                             }
-                            printf("Player %d moved horse 0 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
+                            printf("\nPlayer %d moved horse 0 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
                         }
                         //if the player chose 1 -> move horse 1
                         else if (choice == 1)
@@ -531,9 +532,9 @@ int main(int argc, char *argv[])
 
                                 changeCase(0, pGameBoard, checkEmpty[0], checkEmpty[1], checkEmpty[2]);
                                 changeCase(1, pGameBoard, nextPlayer, 1, checkDepassement);
-                                printf("The horse %d of player %d is no longer on the gameboard", checkEmpty[1], checkEmpty[0]);
+                                printf("\nThe horse %d of player %d is no longer on the gameboard", checkEmpty[1], checkEmpty[0]);
                             }
-                            printf("Player %d moved horse 1 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
+                            printf("\nPlayer %d moved horse 1 from case %d to case %d\n", nextPlayer, indiceCheval, checkDepassement);
                         }
                     }
                 }
@@ -582,8 +583,10 @@ int main(int argc, char *argv[])
     printf("Gameboard : \n");
     for (i = 0; i < n; i++)
     {
+        printf("[- PLAYER %d -]\n", i);
         for (j = 0; j < 2; j++)
         {
+            printf("[horse %d] :\n", j);
             for (k = 0; k < 56; k++)
             {
                 printf("%d ", gameBoard[i][j][k]);
