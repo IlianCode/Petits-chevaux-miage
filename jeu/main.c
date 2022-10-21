@@ -16,17 +16,17 @@ int main(int argc, char *argv[])
     int n = atoi(argv[1]);
     // array of pid
     int pidTab[n];
-    int checkDepassement;
+
+   //array needed
     int checkEmpty[3];
     int indiceWin[2];
     int isAtEnd[n];
-    // variable du jeu
+    // variable of the game
+    int checkDepassement;
     int nextPlayer = 0;
     int dice = 0;
     bool gameIsOver = false;
-    // array of pid
     int i, j, k;
-
     int isThereAWin = -1;
 
     int gameBoard[n][2][56];
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     }
     int(*pStairs)[7] = stairs;
 
-    int oui = 0;
+    
     while (!gameIsOver)
     {
 
